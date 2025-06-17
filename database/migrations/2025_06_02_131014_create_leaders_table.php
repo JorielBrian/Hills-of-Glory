@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('leaders', function (Blueprint $table) {
             $table->id();
             $table->string('username');
-            // $table->string('email');
+            $table->string('email');
             $table->string('password');
-            // $table->string('firstname');
+            $table->string('firstname');
             // $table->string('middlename');
-            // $table->string('lastname');
+            $table->string('lastname');
             // $table->string('gender');
-            // $table->date('birthdate');
+            $table->date('birthdate');
             $table->boolean('is_active');
             $table->timestamps();
         });

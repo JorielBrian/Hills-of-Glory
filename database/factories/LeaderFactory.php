@@ -17,7 +17,13 @@ class LeaderFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'username' => fake()->userName(),
+            'email' => fake()->email(),
+            'password' => fake()->password(10),
+            'firstname' => fake()->firstName(),
+            'lastname' => fake()->lastName(),
+            'birthdate' => fake()->date(),
+            'is_active' => fake()->boolean()
         ];
     }
 }
