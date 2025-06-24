@@ -17,7 +17,7 @@ class LeaderController extends Controller
         //testing only
         //$leaders = Leader::all(); //fetching all leaders
         $leaders = Leader::orderBy('created_at', 'desc')->get(); //fetching all leaders in order by date created
-        return view('dashboard.index', ['leaders' => $leaders]);
+        return view('dashboard.members', ['leaders' => $leaders]);
     }
 
     public function show($id)

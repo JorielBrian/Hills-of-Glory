@@ -1,4 +1,4 @@
-<div {{ $attributes }}>
+ <div :class="{translate-x-full: !open}" class="h-screen w-1/3 bg-white absolute right-0 text-black text-center align-middle py-60">
     <h1 class="text-6xl">Welcome!</h1>  
     <h2 class="text-2xl">Login your account</h2>
     <form action="/dashboard" class="grid col-2 w-100 m-auto">
