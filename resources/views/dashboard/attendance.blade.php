@@ -1,11 +1,19 @@
-@extends('layouts.dashboard')
-
-@section ('main')
-    <div>
-        <header class="relative h-50">
-            <h1 class="text-6xl p-10">Attendance</h1>
-        </header>
-        <div class="bg-[#f1f1f1] h-screen p-7">
+<x-layouts.app :title="__('Attendance')">
+    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl text-black">
+        <h1 class="text-6xl p-10">Attendance</h1>
+        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+            </div>
+            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+            </div>
+            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+            </div>
+        </div>
+        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+            <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
         </div>
     </div>
-@endsection
+</x-layouts.app>

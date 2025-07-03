@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.front>
     {{-- WELCOME --}}
     <div class="px-10">
         <div class="">
@@ -19,4 +19,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-layouts.front>
