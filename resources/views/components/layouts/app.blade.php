@@ -4,41 +4,42 @@
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-[#f1f1f1] dark:bg-zinc-800">
-        <flux:sidebar sticky stashable class="bg-[#182920] w-130">
+        {{-- SIDEBAR --}}
+        <flux:sidebar sticky stashable class="bg-[#182920] w-110 relative justify-center">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-                <div class="flex mb-30 pt-10 items-center justify-between px-7">
-                    <img src="/hog_logo.png" alt="logo" class="size-20">
+            <a href="{{ route('dashboard') }}" class="flex fixed top-5 items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+                <div class="flex pt-3 items-center justify-between gap-2">
+                    <img src="/hog_logo.png" alt="logo" class="size-15">
                     <h1 class="text-3xl font-bold text-[#e2b900]">Hills of Glory</h1>
                     <h1 class="text-3xl text-white">Mabalacat</h1>
                 </div>
             </a>
 
-            <flux:navlist>
-                <flux:navlist.group class="grid">
-                    <flux:navlist.item class="text-white! hover:bg-white/30! visited:bg-amber-100!" icon="window" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item class="text-white! hover:bg-white/30! visited:bg-amber-100!" icon="user-group" :href="route('members')" :current="request()->routeIs('members')" wire:navigate>{{ __('Members') }}</flux:navlist.item>
-                    <flux:navlist.item class="text-white! hover:bg-white/30! visited:bg-amber-100!" icon="calendar" :href="route('events')" :current="request()->routeIs('events')" wire:navigate>{{ __('Events') }}</flux:navlist.item>
-                    <flux:navlist.item class="text-white! hover:bg-white/30! visited:bg-amber-100!" icon="check-circle" :href="route('attendance')" :current="request()->routeIs('attendance')" wire:navigate>{{ __('Attendance') }}</flux:navlist.item>
-                    <flux:navlist.item class="text-white! hover:bg-white/30! visited:bg-amber-100!" icon="banknotes" :href="route('finances')" :current="request()->routeIs('finance')" wire:navigate>{{ __('Finances') }}</flux:navlist.item>
-                    <flux:navlist.item class="text-white! hover:bg-white/30! visited:bg-amber-100!" icon="credit-card" :href="route('expense')" :current="request()->routeIs('expense')" wire:navigate>{{ __('Expense') }}</flux:navlist.item>
-                    <flux:navlist.item class="text-white! hover:bg-white/30! visited:bg-amber-100!" icon="presentation-chart-line" :href="route('report')" :current="request()->routeIs('report')" wire:navigate>{{ __('Report') }}</flux:navlist.item>
+            <flux:navlist variant="outline" class="w-full">
+                <flux:navlist.group class="grid w-full">
+                    <flux:navlist.item class="content-center!" icon="window" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item class="content-center!" icon="user-group" :href="route('members')" :current="request()->routeIs('members')" wire:navigate>{{ __('Members') }}</flux:navlist.item>
+                    <flux:navlist.item class="content-center!" icon="calendar" :href="route('events')" :current="request()->routeIs('events')" wire:navigate>{{ __('Events') }}</flux:navlist.item>
+                    <flux:navlist.item class="content-center!" icon="check-circle" :href="route('attendance')" :current="request()->routeIs('attendance')" wire:navigate>{{ __('Attendance') }}</flux:navlist.item>
+                    <flux:navlist.item class="content-center!" icon="banknotes" :href="route('finances')" :current="request()->routeIs('finance')" wire:navigate>{{ __('Finances') }}</flux:navlist.item>
+                    <flux:navlist.item class="content-center!" icon="credit-card" :href="route('expense')" :current="request()->routeIs('expense')" wire:navigate>{{ __('Expense') }}</flux:navlist.item>
+                    <flux:navlist.item class="content-center!" icon="presentation-chart-line" :href="route('report')" :current="request()->routeIs('report')" wire:navigate>{{ __('Report') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
         </flux:sidebar>
 
         <!-- HEADER -->
-        <flux:header class="bg-[#d9dfbc] justify-end">
-            <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
-            <div class="flex relative h-1/2 m-5">
-                <flux:input type="search" class="relative rounded-full bg-white w-150 mx-2 border-0 content-center overflow-hidden" placeholder="Search"></flux:input>
-                <span class="font-semibold text-black mx-2">{{ auth()->user()->name }}</span>
-                <flux:dropdown position="top" align="end">
+        <flux:header class="bg-[#d9dfbc] justify-between lg:justify-end">
+            <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
+            <div class="flex relative h-1/2 m-5 items-center">
+                <flux:input type="text" class="relative rounded-full bg-white mx-2 content-center overflow-hidden h-10" placeholder="Search"></flux:input>
+                <span class="font-semibold text-black mx-2">{{ auth()->user()->first_name }}</span>
+                <flux:dropdown position="top">
                     <flux:profile
                         :initials="auth()->user()->initials()"
-                        icon-trailing="chevron-down"
-                        class="rounded-full"
+                        :chevron="false"
+                        circle
                     />
 
                     <flux:menu>
@@ -54,7 +55,7 @@
                                     </span>
 
                                     <div class="grid flex-1 text-start text-sm leading-tight">
-                                        <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
+                                        <span class="truncate font-semibold">{{ auth()->user()->first_name }}</span>
                                         <span class="truncate text-xs">{{ auth()->user()->email }}</span>
                                     </div>
                                 </div>

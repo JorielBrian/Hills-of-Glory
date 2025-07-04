@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -11,7 +12,7 @@ Route::view('dashboard', 'dashboard.dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::view('members', 'dashboard.members')
+Route::get('/members', [MemberController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('members');
 

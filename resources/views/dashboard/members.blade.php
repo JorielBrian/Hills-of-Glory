@@ -13,23 +13,32 @@
                 </div>
             </div>
         </div>
-        <div class="bg-[#f1f1f1] h-screen px-7">
-            <div class="grid grid-cols-5 bg-white justify-between p-3">
-                <h1 class="font-bold">Name</h1>
-                <h1 class="font-bold">Date Created</h1>
-                <h1 class="font-bold">Role</h1>
-                <h1 class="font-bold">Status</h1>
-                <h1 class="font-bold">Action</h1>
-            </div>
-            {{-- @foreach ($leaders as $leader)
-                <div class="grid grid-cols-5 bg-white my-1 p-3">
-                    <p>{{ $leader['username'] }}</p>
-                    <p>{{ $leader['created_at'] }}</p>
-                    <P> ------ </P>
-                    <p>{{ $leader['is_active'] }}</p>
-                    <p> ------ </p>
-                </div>
-            @endforeach --}}
+        <div class="bg-[#f1f1f1] h-screen">
+            <table class="table-auto w-full">
+                <tr class="bg-white">
+                    <th class="p-3 w-fit">Name</th>
+                    <th class="p-3 w-fit">Date Created</th>
+                    <th class="p-3 w-fit">Role</th>
+                    <th class="p-3 w-fit">Status</th>
+                    <th class="p-3 w-fit">Action</th>
+                </tr>
+                @foreach ($members as $member)
+                    <tr class="bg-white">
+                        <td class="p-3 text-center w-80">
+                            <flux:profile :chevron="false" name="{{ $member['first_name'] }}"/>
+                        </td>
+                        <td class="p-3 text-center w-fit">{{ $member['created_at'] }}</td>
+                        <td class="p-3 text-center w-fit">------</td>
+                        <td class="p-3 text-center w-fit">{{ $member['is_active'] }}</td>
+                        <td class="p-3 text-center w-fit">
+                            <span>
+                                <flux:icon.cog-6-tooth/>
+                            </span>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+            {{ $members->links() }}
         </div>
     </div>
 </x-layouts.app>

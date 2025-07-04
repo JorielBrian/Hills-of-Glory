@@ -7,7 +7,11 @@ use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public string $name = '';
+    public string $first_name = '';
+    public string $middle_name = '';
+    public string $last_name = '';
+    public string $age = '';
+    public string $gender = '';
     public string $email = '';
 
     /**
@@ -15,7 +19,11 @@ new class extends Component {
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
+        $this->first_name = Auth::user()->first_name;
+        $this->middle_name = Auth::user()->middle_name;
+        $this->last_name = Auth::user()->last_name;
+        $this->age = Auth::user()->age;
+        $this->gender = Auth::user()->gender;
         $this->email = Auth::user()->email;
     }
 
@@ -27,8 +35,10 @@ new class extends Component {
         $user = Auth::user();
 
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'string', 'max:2'],
             'email' => [
                 'required',
                 'string',
@@ -47,7 +57,10 @@ new class extends Component {
 
         $user->save();
 
-        $this->dispatch('profile-updated', name: $user->name);
+        $this->dispatch('profile-updated', first_name: $user->first_name);
+        $this->dispatch('profile-updated', middle_name: $user->middle_name);
+        $this->dispatch('profile-updated', last_name: $user->last_name);
+        $this->dispatch('profile-updated', age: $user->age);
     }
 
     /**
@@ -74,7 +87,15 @@ new class extends Component {
 
     <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <div class="flex gap-4">
+                <flux:input wire:model="first_name" :label="__('First Name')" type="text" required autofocus autocomplete="first_name" />
+                <flux:input wire:model="middle_name" :label="__('Middle Name')" type="text" required autofocus autocomplete="middle_name" />
+                <flux:input wire:model="last_name" :label="__('Last Name')" type="text" required autofocus autocomplete="last_name" />
+            </div>
+            <div class="flex gap-4">
+                <flux:input wire:model="age" :label="__('Age')" type="text" required autofocus autocomplete="age" class="w-10!"/>
+                <flux:input wire:model="gender" :label="__('Gender')" type="text" required autofocus autocomplete="gender" disabled class="w-30!"/>
+            </div>
 
             <div>
                 <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />

@@ -9,7 +9,11 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
-    public string $name = '';
+    public string $first_name = '';
+    public string $middle_name = '';
+    public string $last_name = '';
+    public string $age = '';
+    public string $gender = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -20,7 +24,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public function register(): void
     {
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'string', 'max:255'],
+            'gender' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -44,14 +52,59 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <form wire:submit="register" class="flex flex-col gap-6">
         <!-- Name -->
         <flux:input
-            wire:model="name"
-            :label="__('Name')"
+            wire:model="first_name"
+            :label="__('First Name')"
             type="text"
             required
             autofocus
-            autocomplete="name"
-            :placeholder="__('Full name')"
+            autocomplete="first_name"
+            :placeholder="__('First Name')"
         />
+
+        <flux:input
+            wire:model="middle_name"
+            :label="__('Middle Name')"
+            type="text"
+            required
+            autofocus
+            autocomplete="middle_name"
+            :placeholder="__('Middle Name')"
+        />
+
+        <flux:input
+            wire:model="last_name"
+            :label="__('Last Name')"
+            type="text"
+            required
+            autofocus
+            autocomplete="last_name"
+            :placeholder="__('Last Name')"
+        />
+
+        <div class="flex gap-2">
+            <flux:input
+                wire:model="age"
+                :label="__('Age')"
+                type="text"
+                required
+                autofocus
+                autocomplete="age"
+                :placeholder="__('Age')"
+            />
+
+            <flux:select
+                wire:model="gender"
+                :label="__('Gender')"
+                type="text"
+                required
+                autofocus
+                autocomplete="gender"
+                :placeholder="__('Gender')"
+            >
+                <flux:select.option class="option text-zinc-700">Male</flux:select>
+                <flux:select.option class="option text-zinc-700">Female</flux:select>
+            </flux:select>
+        </div>
 
         <!-- Email Address -->
         <flux:input
@@ -92,8 +145,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     </form>
 
-    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
+    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-300 dark:text-zinc-400">
         {{ __('Already have an account?') }}
-        <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+        <flux:link class="text-white" :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
     </div>
 </div>
