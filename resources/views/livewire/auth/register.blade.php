@@ -9,6 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
+    public string $username = '';
     public string $first_name = '';
     public string $middle_name = '';
     public string $last_name = '';
@@ -24,6 +25,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public function register(): void
     {
         $validated = $this->validate([
+            'username' => ['required', 'string', 'max:255'],
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -49,8 +51,17 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
 
-    <form wire:submit="register" class="flex flex-col gap-6">
+    <form wire:submit="register" class="flex flex-col gap-6 bg-white/30 p-7 rounded-xl">
         <!-- Name -->
+        <flux:input
+            wire:model="username"
+            :label="__('User Name')"
+            type="text"
+            required
+            autofocus
+            autocomplete="username"
+            :placeholder="__('User Name')"
+        />
         <flux:input
             wire:model="first_name"
             :label="__('First Name')"

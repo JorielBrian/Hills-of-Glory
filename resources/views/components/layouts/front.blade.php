@@ -14,7 +14,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     </head>
-    <body class="bg-[url(/public/background_one.jpg)] bg-center bg-no-repeat bg-fixed text-white">
+    <body class="bg-[url(/public/background_one.jpg)] bg-center bg-no-repeat bg-fixed text-zinc-200">
         <div class=" bg-black/60 h-full">
             {{-- <x-login :class="{translate-x-full: !open}" class="h-screen w-1/3 bg-white absolute right-0 text-black text-center align-middle py-60"></x-login> --}}
 
@@ -27,17 +27,17 @@
                     </div>
                 </a>
                 <nav>
-                    <ul class="flex justify-between text-xl">
-                        <li class="px-5 py-2 hover:bg-white/30 active:bg-white/20 rounded-4xl"><button>About</button></li>
-                        <li class="px-5 py-2 hover:bg-white/30 active:bg-white/20 rounded-4xl"><button>Ministries</button></li>
-                        <li class="px-5 py-2 hover:bg-white/30 active:bg-white/20 rounded-4xl"><button>Services</button></li>
-                        <li class="px-5 py-2 hover:bg-white/30 active:bg-white/20 rounded-4xl"><button>Connect</button></li>
+                    <ul class="flex justify-between text-xl *:px-3 *:py-1 *:text-center *:items-center *:hover:text-zinc-100 *:hover:bg-zinc-200/30 *:active:bg-zinc-400/20 *:rounded-lg">
+                        <li><button>About</button></li>
+                        <li><button>Ministries</button></li>
+                        <li><button>Services</button></li>
+                        <li><button>Connect</button></li>
                     </ul>
                 </nav>
                 @if (Route::has('login'))
                     <nav class="flex items-center justify-end gap-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"> Dashboard </a>
+                            <a href="{{ url('/dashboard') }}" class="inline-block px-5 py-1.5 text-md text-zinc-200 leading-normal bg-zinc-300/10 border border-zinc-200/30 rounded-sm hover:bg-zinc-300/30 hover:border-[#1915014a]"> Dashboard </a>
                         @else
                             <a href="{{ route('login') }}" class="inline-block text-xl hover:underline leading-normal" > Sign In </a>
                         @endauth

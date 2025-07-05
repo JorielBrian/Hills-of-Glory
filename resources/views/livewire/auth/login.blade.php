@@ -79,7 +79,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
 
-    <form wire:submit="login" class="flex flex-col gap-6">
+    <form wire:submit="login" class="flex flex-col gap-6 bg-white/30 p-7 rounded-xl">
         <!-- Email Address -->
         <flux:input
             wire:model="email"
@@ -118,6 +118,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     </form>
 
+    {{-- SIGN IN --}}
     @if (Route::has('register'))
         <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-300 dark:text-zinc-400">
             {{ __('Don\'t have an account?') }}

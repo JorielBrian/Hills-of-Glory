@@ -10,7 +10,7 @@ class MemberController extends Controller
 {
     public function index()
     {
-        $members = Member::orderBy('created_at', 'desc')->paginate(8);
+        $members = Member::orderBy('first_name', 'desc')->paginate(10);
 
         return view('dashboard.members', ["members" => $members]);
     }

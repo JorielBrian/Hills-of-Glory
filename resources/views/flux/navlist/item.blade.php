@@ -40,7 +40,7 @@ $classes = Flux::classes()
             false => [
                 'data-current:text-zinc-800 dark:data-current:text-zinc-100 data-current:border-zinc-200',
                 'data-current:bg-white dark:data-current:bg-white/10 data-current:border data-current:border-zinc-200 dark:data-current:border-white/10 data-current:shadow-xs',
-                'hover:text-zinc-800 dark:hover:text-white',
+                'hover:text-zinc-100 dark:hover:text-white',
             ],
         },
         default => match ($accent) {
