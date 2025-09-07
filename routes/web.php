@@ -6,11 +6,60 @@ use Livewire\Volt\Volt;
 
 // Front Page
 Route::get('/', function () {
-    return view('welcome');
+    return view('homepage.welcome');
 })->name('home');
 
+Route::get('/about', function () {
+    return view('homepage.about');
+})->name('about');
+
+Route::get('/services', function () {
+    return view('homepage.services');
+})->name('services');
+
+Route::get('/connect', function () {
+    return view('homepage.connect');
+})->name('connect');
+
+// Ministries
+Route::get('/ministries/admin_and_extension', function () {
+    return view('homepage.ministries.administration');
+})->name('admin and extension');
+
+Route::get('/ministries/consolidation', function () {
+    return view('homepage.ministries.consolidation');
+})->name('consolidation');
+
+Route::get('/ministries/creative', function () {
+    return view('homepage.ministries.creative');
+})->name('creative');
+
+Route::get('/ministries/education', function () {
+    return view('homepage.ministries.education');
+})->name('education');
+
+Route::get('/ministries/events', function () {
+    return view('homepage.ministries.events');
+})->name('events ministry');
+
+Route::get('/ministries/finance', function () {
+    return view('homepage.ministries.finance');
+})->name('finance ministry');
+
+Route::get('/ministries/kids', function () {
+    return view('homepage.ministries.hills_kids');
+})->name('hills kids');
+
+Route::get('/ministries/hospitality', function () {
+    return view('homepage.ministries.hospitality');
+})->name('hospitality');
+
+Route::get('/ministries/music_and_arts', function () {
+    return view('homepage.ministries.music_and_arts');
+})->name('music and arts');
+
 // Dashboard
-Route::view('dashboard', 'dashboard.dashboard')
+Route::view('dashboard', 'dashboard.index')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 

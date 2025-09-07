@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Members')">
+<x-layouts.dashboard_layout :title="__('Members')">
     <div class="flex h-full w-full flex-1 flex-col rounded-xl text-black gap-5">
         <div class="bg-white">
             <h1 class="text-6xl p-10">Members</h1>
@@ -48,4 +48,4 @@
             {{ $members->links() }}
         </div>
     </div>
-</x-layouts.app>
+</x-layouts.dashboard_layout>

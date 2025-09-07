@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Report')">
+<x-layouts.dashboard_layout :title="__('Report')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl text-black">
         <h1 class="text-6xl p-10">Report</h1>
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -16,4 +16,4 @@
             <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
         </div>
     </div>
-</x-layouts.app>
+</x-layouts.dashboard_layout>
