@@ -32,16 +32,37 @@
         </flux:sidebar>
 
         <!-- HEADER -->
-        <flux:header class="bg-[#d9dfbc] justify-between h-25 lg:justify-end">
+        <flux:header class="bg-[#d9dfbc] justify-between h-25 lg:justify-between">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
+            <h1 class="text-4xl font-bold text-gray-900 border-l-4 border-[#e2b900] pl-4 py-1">
+                @php
+                    $routeName = request()->route()->getName();
+                    $pageTitle = match($routeName) {
+                        'dashboard' => 'Dashboard',
+                        'members' => 'Members',
+                        'members.index' => 'Members',
+                        'members.create' => 'Add New Member',
+                        'members.edit' => 'Edit Member',
+                        'members.show' => 'Member Details',
+                        'lifegroups' => 'Life Groups',
+                        'lifegroups.index' => 'Life Groups',
+                        'lifegroups.create' => 'Create Life Group',
+                        'life-groups.edit' => 'Edit Life Group',
+                        'life-groups.show' => 'Life Group Details',
+                        'settings.profile' => 'Profile Settings',
+                        default => 'Hills of Glory Mabalacat'
+                    };
+                @endphp
+                {{ $pageTitle }}
+            </h1>
             <div class="flex relative h-1/2 m-5 items-center">
                 <flux:input type="text" class="relative rounded-full bg-white mx-2 content-center overflow-hidden h-10 w-100!" placeholder="Search"></flux:input>
                 <span class="font-semibold text-black mx-2">{{ auth()->user()->username }}</span>
                 <flux:dropdown position="top">
                     <flux:profile
+                        :avatar="auth()->user()->getProfilePhotoUrlAttribute()"
                         :initials="auth()->user()->initials()"
                         :chevron="false"
-                        :avatar="auth()->user()->profile_photo_url ? auth()->user()->profile_photo_url : null"
                         circle
                     />
 
@@ -50,11 +71,17 @@
                             <div class="p-0 text-sm font-normal">
                                 <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                                     <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                        <span
-                                            class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                        >
-                                            {{ auth()->user()->initials() }}
-                                        </span>
+                                        @if(auth()->user()->profile_photo)
+                                            <img 
+                                                src="{{ asset('storage/' . auth()->user()->profile_photo) }}" 
+                                                alt="{{ auth()->user()->username }}"
+                                                class="h-full w-full object-cover"
+                                            >
+                                        @else
+                                            <span class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                                {{ auth()->user()->initials() }}
+                                            </span>
+                                        @endif
                                     </span>
 
                                     <div class="grid flex-1 text-start text-sm leading-tight">

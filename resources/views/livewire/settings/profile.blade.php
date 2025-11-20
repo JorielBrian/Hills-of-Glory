@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
+use Carbon\Carbon;
+use App\Enums\MemberEnums\Gender;
 
 new class extends Component {
     use WithFileUploads;
@@ -15,11 +17,22 @@ new class extends Component {
     public string $first_name = '';
     public string $middle_name = '';
     public string $last_name = '';
-    public string $age = '';
-    public string $gender = '';
+    public string $birth_date = '';
+    public string $gender = ''; // This should remain string for form handling
     public string $email = '';
     public $profile_photo;
     public $new_profile_photo;
+
+    /**
+     * Computed property for age
+     */
+    public function getComputedAgeProperty()
+    {
+        if ($this->birth_date) {
+            return Carbon::parse($this->birth_date)->age;
+        }
+        return null;
+    }
 
     /**
      * Mount the component.
@@ -31,8 +44,13 @@ new class extends Component {
         $this->first_name = $user->first_name;
         $this->middle_name = $user->middle_name ?? '';
         $this->last_name = $user->last_name;
-        $this->age = (string) $user->age;
-        $this->gender = $user->gender;
+        $this->birth_date = $user->birth_date ? $user->birth_date->format('Y-m-d') : ''; 
+        
+        // Handle gender - get the string value from the enum
+        $this->gender = $user->gender instanceof \BackedEnum 
+            ? $user->gender->value 
+            : (string) $user->gender;
+            
         $this->email = $user->email;
         $this->profile_photo = $user->profile_photo;
     }
@@ -49,7 +67,7 @@ new class extends Component {
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'age' => ['required', 'integer', 'min:1'],
+            'birth_date' => ['required', 'date'], 
             'gender' => ['required', 'string', 'in:Male,Female'],
             'email' => [
                 'required',
@@ -59,7 +77,7 @@ new class extends Component {
                 'max:255',
                 Rule::unique(User::class)->ignore($user->id)
             ],
-            'new_profile_photo' => ['nullable', 'image', 'max:2048'], // 2MB max
+            'new_profile_photo' => ['nullable', 'image', 'max:2048'], 
         ]);
 
         // Handle profile photo upload
@@ -231,15 +249,29 @@ new class extends Component {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <flux:input 
-                    wire:model="age" 
-                    :label="__('Age')" 
-                    type="number" 
-                    required 
-                    min="1" 
-                    autocomplete="age" 
-                    :placeholder="__('Age')" 
-                />
+                <!-- Birth Date with Age Display -->
+                <div>
+                    <flux:input 
+                        wire:model="birth_date" 
+                        :label="__('Birth Date')" 
+                        type="date" 
+                        required 
+                        autocomplete="bday" 
+                        :placeholder="__('Birth Date')" 
+                    />
+                    
+                    <!-- Display computed age -->
+                    @if ($birth_date)
+                        <div class="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                            <p class="text-sm text-blue-800">
+                                <strong>Age:</strong> {{ $this->computedAge }} years old
+                            </p>
+                            <p class="text-xs text-blue-600 mt-1">
+                                Age is automatically calculated and will update over time
+                            </p>
+                        </div>
+                    @endif
+                </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Gender') }}</label>

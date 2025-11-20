@@ -7,18 +7,33 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Carbon\Carbon;
+use App\Enums\MemberEnums\MemberType;
+use App\Enums\MemberEnums\MemberRole;
+use App\Enums\MemberEnums\HillsJourney;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     public string $username = '';
     public string $first_name = '';
     public string $middle_name = '';
     public string $last_name = '';
-    public string $age = '';
+    public string $birth_date = '';
     public string $gender = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
     public bool $is_admin = false;
+
+    /**
+     * Computed property for age
+     */
+    public function getComputedAgeProperty()
+    {
+        if ($this->birth_date) {
+            return Carbon::parse($this->birth_date)->age;
+        }
+        return null;
+    }
 
     /**
      * Handle an incoming registration request.
@@ -28,16 +43,22 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $validated = $this->validate([
             'username' => ['required', 'string', 'max:255'],
             'first_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'age' => ['required', 'string', 'max:255'],
-            'gender' => ['required', 'string', 'max:255'],
+            'birth_date' => ['required', 'date'],
+            'gender' => ['required', 'string', 'in:Male,Female'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
             'is_admin' => ['boolean'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        
+        // Set default values for required fields
+        $validated['member_role'] = MemberRole::LIFE_GUIDE->value;
+        $validated['hills_journey'] = HillsJourney::GRADUATE->value;
+        $validated['is_active'] = true;
+        $validated['is_married'] = false;
 
         event(new Registered(($user = User::create($validated))));
 
@@ -78,7 +99,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
             wire:model="middle_name"
             :label="__('Middle Name')"
             type="text"
-            required
             autofocus
             autocomplete="middle_name"
             :placeholder="__('Middle Name')"
@@ -95,15 +115,30 @@ new #[Layout('components.layouts.auth')] class extends Component {
         />
 
         <div class="flex gap-2">
-            <flux:input
-                wire:model="age"
-                :label="__('Age')"
-                type="text"
-                required
-                autofocus
-                autocomplete="age"
-                :placeholder="__('Age')"
-            />
+            <!-- Birth Date with Age Display -->
+            <div class="flex-1">
+                <flux:input
+                    wire:model="birth_date"
+                    :label="__('Birth Date')"
+                    type="date"
+                    required
+                    autofocus
+                    autocomplete="bday"
+                    :placeholder="__('Birth Date')"
+                />
+                
+                <!-- Display computed age -->
+                @if ($birth_date)
+                    <div class="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                        <p class="text-sm text-blue-800">
+                            <strong>Age:</strong> {{ $this->computedAge }} years old
+                        </p>
+                        <p class="text-xs text-blue-600 mt-1">
+                            Age is automatically calculated
+                        </p>
+                    </div>
+                @endif
+            </div>
 
             <flux:select
                 wire:model="gender"

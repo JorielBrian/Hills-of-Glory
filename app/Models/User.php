@@ -7,8 +7,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Enums\MemberEnums\Gender;
+use App\Enums\MemberEnums\MemberType;
+use App\Enums\MemberEnums\HillsJourney;
+use App\Enums\MemberEnums\Ministry;
+use App\Enums\MemberEnums\MinistryRole;
+use App\Enums\EventsEnums\Event;
+use App\Enums\MemberEnums\UserRole;
 use Illuminate\Support\Facades\Storage;
-use App\Enums\MemberEnums\CoreRole;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -19,13 +26,26 @@ class User extends Authenticatable
         'first_name',
         'middle_name',
         'last_name',
-        'age',
+        'birth_date',
         'gender',
         'email',
-        'core_role',
+        'member_role',
         'is_admin',
         'profile_photo',
         'password',
+        'member_type',
+        'hills_journey',
+        'ministry',
+        'ministry_role',
+        'ministry_assignment',
+        'is_married',
+        'address',
+        'contact',
+        'facebook_account',
+        'invited_by',
+        'date_invited',
+        'service_invited',
+        'is_active',
     ];
 
     protected $hidden = [
@@ -36,9 +56,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'core_role' => CoreRole::class,
+        'birth_date' => 'date',
+        'date_invited' => 'date',
+        'member_role' => UserRole::class,
+        'gender' => Gender::class,
+        'member_type' => MemberType::class,
+        'hills_journey' => HillsJourney::class,
+        'ministry' => Ministry::class,
+        'ministry_role' => MinistryRole::class,
+        'service_invited' => Event::class,
         'is_admin' => 'boolean',
+        'is_active' => 'boolean',
+        'is_married' => 'boolean',
     ];
+
+    protected $appends = ['age', 'full_name', 'profile_photo_url'];
 
     public function initials()
     {
@@ -54,17 +86,18 @@ class User extends Authenticatable
 
     public function getProfilePhotoUrlAttribute()
     {
-        if (!$this->profile_photo) {
-            return null;
-        }
+        return $this->profile_photo
+            ? asset('storage/' . $this->profile_photo)
+            : null;
+    }
 
-        // If it's already a full URL, return as is
-        if (filter_var($this->profile_photo, FILTER_VALIDATE_URL)) {
-            return $this->profile_photo;
-        }
-
-        // If it's a storage path, convert to URL
-        return Storage::url($this->profile_photo);
+    /**
+     * Calculate age based on birth date
+     * This will automatically update as time passes
+     */
+    public function getAgeAttribute(): int
+    {
+        return Carbon::parse($this->birth_date)->age;
     }
 
     public function ledLifeGroups(): HasMany
@@ -98,5 +131,11 @@ class User extends Authenticatable
     public function scopeAdmins($query)
     {
         return $query->where('is_admin', true);
+    }
+
+    // Scope for active users
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

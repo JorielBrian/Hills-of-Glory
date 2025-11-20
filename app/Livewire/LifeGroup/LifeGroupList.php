@@ -21,6 +21,10 @@ class LifeGroupList extends Component
 
     public function mount()
     {
+        // Allow admins to see all life groups
+        if (Auth::user()->is_admin) {
+            return;
+        }
         // Check if user is a network leader by seeing if they have any life groups assigned
         $hasLifeGroups = LifeGroup::where('network_leader_id', Auth::id())->exists();
 

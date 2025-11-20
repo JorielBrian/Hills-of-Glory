@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use App\Enums\MemberEnums\Gender;
-use App\Enums\MemberEnums\Status;
 use App\Enums\MemberEnums\MemberRole;
 use App\Enums\MemberEnums\HillsJourney;
+use App\Enums\MemberEnums\MemberType;
 use App\Enums\MemberEnums\Ministry;
 use App\Enums\MemberEnums\MinistryRole;
+use App\Enums\EventsEnums\Event;
 
 class Member extends Model
 {
@@ -18,13 +20,17 @@ class Member extends Model
         'first_name',
         'middle_name',
         'last_name',
-        'age',
         'gender',
         'birth_date',
         'address',
         'contact',
-        'status',
+        'email',
+        'member_type',
+        'is_married',
         'invited_by',
+        'date_invited',
+        'service_invited',
+        'facebook_account',
         'member_photo',
         'member_role',
         'hills_journey',
@@ -38,16 +44,19 @@ class Member extends Model
 
     protected $casts = [
         'birth_date' => 'date',
+        'date_invited' => 'date',
         'is_active' => 'boolean',
+        'is_married' => 'boolean',
         'gender' => Gender::class,
-        'status' => Status::class,
+        'member_type' => MemberType::class,
         'member_role' => MemberRole::class,
         'hills_journey' => HillsJourney::class,
         'ministry' => Ministry::class,
         'ministry_role' => MinistryRole::class,
+        'service_invited' => Event::class,
     ];
 
-    protected $appends = ['full_name', 'member_photo_url'];
+    protected $appends = ['full_name', 'member_photo_url', 'age'];
 
     public function lifeGroup(): BelongsTo
     {
@@ -73,6 +82,15 @@ class Member extends Model
         return Storage::url($this->member_photo);
     }
 
+    /**
+     * Calculate age based on birth date
+     * This will automatically update as time passes
+     */
+    public function getAgeAttribute(): int
+    {
+        return Carbon::parse($this->birth_date)->age;
+    }
+
     // Scopes
     public function scopeActive($query)
     {
@@ -84,8 +102,8 @@ class Member extends Model
         return $query->where('life_group_id', $lifeGroupId);
     }
 
-    public function scopeByStatus($query, $status)
+    public function scopeByMemberType($query, $memberType)
     {
-        return $query->where('status', $status);
+        return $query->where('member_type', $memberType);
     }
 }

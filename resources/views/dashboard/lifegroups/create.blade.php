@@ -1,3 +1,3 @@
 <x-layouts.dashboard_layout :title="__('Create Life Group')">
-    <livewire:create-life-group />
+    <livewire:life-groups.create-life-group />
 </x-layouts.dashboard_layout>

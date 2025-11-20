@@ -7,6 +7,7 @@ use Livewire\Volt\Volt;
 
 use App\Livewire\EventsTable;
 use App\Livewire\CreateEvent;
+use App\Livewire\LifeGroup\CreateLifeGroup;
 use App\Livewire\Member\ViewMember;
 use App\Livewire\Member\EditMemberForm;
 use App\Livewire\LifeGroup\LifeGroupList;
@@ -71,20 +72,20 @@ Route::view('dashboard', 'dashboard.index')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// LIFE GROUPS - Fixed Routes
+// LIFE GROUPS
 Route::get('/lifegroups', LifeGroupList::class)
     ->name('lifegroups')
-    ->middleware(['auth']);
+    ->middleware(['auth', 'verified']);
 
-Route::get('/lifegroups/create', function () {
-    return view('dashboard.lifegroups.create');
-})->middleware(['auth', 'verified'])->name('lifegroups.create');
+Route::get('/lifegroups/create', CreateLifeGroup::class)
+    ->name('lifegroups.create')
+    ->middleware(['auth', 'verified']);
 
 Route::get('/lifegroups/{lifeGroup}', LifeGroupDetails::class)
     ->name('life-groups.show')
     ->middleware(['auth']);
 
-// MEMBERS - Fixed Routes (Separate from lifegroups)
+// MEMBERS
 Route::get('/members', function () {
     return view('dashboard.members.index');
 })->middleware(['auth', 'verified'])->name('members');

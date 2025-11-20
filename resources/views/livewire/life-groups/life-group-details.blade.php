@@ -36,19 +36,35 @@
                     </div>
                 </div>
 
-                <div class="mt-4 lg:mt-0 flex space-x-3">
-                    <a 
-                        href="{{ route('lifegroups') }}" 
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-                    >
+                <div class="flex flex-col mt-4 gap-2 lg:mt-0 space-x-3">
+                    {{-- <flux:button :href="route('lifegroups')">
                         Back to List
-                    </a>
-                    <button 
+                    </flux:button> --}}
+                    <flux:button :href="route('members.create')">
+                        Add Member
+                    </flux:button>
+                    @if ($lifeGroup->is_active)
+                        <flux:button
+                            variant="danger"
+                            wire:click="toggleLifeGroupStatus"
+                            class="w-30!"
+                        >
+                            Deactivate
+                        </flux:button>
+                    @else
+                        <flux:button
+                            color="green"
+                            wire:click="toggleLifeGroupStatus"
+                        >
+                            Activate
+                        </flux:button>
+                    @endif
+                    {{-- <button 
                         wire:click="toggleLifeGroupStatus"
-                        class="px-4 py-2 text-sm font-medium rounded-md {{ $lifeGroup->is_active ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200' }}"
+                        class="px-4 py-2 w-30 text-sm font-medium rounded-md {{ $lifeGroup->is_active ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200' }}"
                     >
                         {{ $lifeGroup->is_active ? 'Deactivate' : 'Activate' }}
-                    </button>
+                    </button> --}}
                 </div>
             </div>
 
@@ -178,8 +194,8 @@
                                             {{ $member->ministry_assignment }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $member->status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                                {{ $member->status }}
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $member->is_active === true ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                                {{ $member->is_active === true ? 'Active' : 'Inactive' }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

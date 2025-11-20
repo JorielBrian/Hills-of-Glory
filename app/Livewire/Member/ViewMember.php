@@ -4,6 +4,13 @@ namespace App\Livewire\Member;
 
 use Livewire\Component;
 use App\Models\Member;
+use App\Enums\MemberEnums\Gender;
+use App\Enums\MemberEnums\MemberRole;
+use App\Enums\MemberEnums\HillsJourney;
+use App\Enums\MemberEnums\MemberType;
+use App\Enums\MemberEnums\Ministry;
+use App\Enums\MemberEnums\MinistryRole;
+use App\Enums\EventsEnums\Event;
 
 class ViewMember extends Component
 {
@@ -11,12 +18,28 @@ class ViewMember extends Component
 
     public function mount(Member $member)
     {
-        $this->member = $member->load(['lifegroup', 'networkLeader']);
+        $this->member = $member->load(['lifeGroup', 'networkLeader']);
     }
 
     public function editMember()
     {
         return redirect()->route('members.edit', $this->member);
+    }
+
+    public function removeMember($memberId)
+    {
+        try {
+            $member = Member::findOrFail($memberId);
+            $member->update([
+                'life_group_id' => null,
+                'network_leader_id' => null
+            ]);
+
+            session()->flash('message', 'Member removed from life group successfully!');
+            return redirect()->route('members');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error removing member: ' . $e->getMessage());
+        }
     }
 
     public function backToMembers()

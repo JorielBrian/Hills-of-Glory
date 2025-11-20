@@ -3,9 +3,6 @@
         <div class="bg-white rounded-lg shadow-sm p-6">
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-bold text-gray-900">Add New Member</h1>
-                <a href="{{ route('members') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
-                    Back to Members
-                </a>
             </div>
 
             <!-- Success Message -->
@@ -75,36 +72,44 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-                        <!-- Age -->
-                        <div>
-                            <label for="age" class="block text-sm font-medium text-gray-700">Age *</label>
-                            <input type="number" wire:model="age" id="age" required min="1"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            @error('age') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <!-- Gender -->
                         <div>
                             <label for="gender" class="block text-sm font-medium text-gray-700">Gender *</label>
                             <select wire:model="gender" id="gender" required
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Select Gender</option>
-                                @foreach($genders as $genderOption)
-                                    <option value="{{ $genderOption->value }}">{{ $genderOption->value }}</option>
-                                @endforeach
+                                @if(!empty($genders))
+                                    @foreach($genders as $genderOption)
+                                        <option value="{{ $genderOption->value }}">{{ $genderOption->value }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             @error('gender') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
-                        <!-- Birth Date -->
+                        <!-- Birth Date with Age Display -->
                         <div>
                             <label for="birth_date" class="block text-sm font-medium text-gray-700">Birth Date *</label>
                             <input type="date" wire:model="birth_date" id="birth_date" required
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @error('birth_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            
+                            <!-- Display computed age -->
+                            @if ($birth_date)
+                                <div class="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                                    <p class="text-sm text-blue-800">
+                                        <strong>Age:</strong> {{ $this->computedAge }} years old
+                                    </p>
+                                    <p class="text-xs text-blue-600 mt-1">
+                                        Age is automatically calculated and will update over time
+                                    </p>
+                                </div>
+                            @endif
                         </div>
+                    </div>
 
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <!-- Contact -->
                         <div>
                             <label for="contact" class="block text-sm font-medium text-gray-700">Contact *</label>
@@ -112,6 +117,15 @@
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="e.g., 09123456789">
                             @error('contact') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" wire:model="email" id="email"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="e.g., member@example.com">
+                            @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
@@ -122,6 +136,41 @@
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                         @error('address') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <!-- Facebook Account -->
+                        <div>
+                            <label for="facebook_account" class="block text-sm font-medium text-gray-700">Facebook Account</label>
+                            <input type="text" wire:model="facebook_account" id="facebook_account"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="e.g., facebook.com/username">
+                            @error('facebook_account') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Member Type -->
+                        <div>
+                            <label for="member_type" class="block text-sm font-medium text-gray-700">Member Type *</label>
+                            <select wire:model="member_type" id="member_type" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Select Type</option>
+                                @if(!empty($memberTypes))
+                                    @foreach($memberTypes as $type)
+                                        <option value="{{ $type->value }}">{{ $type->value }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            @error('member_type') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <!-- Marital Status -->
+                    <div class="mt-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" wire:model="is_married" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            <span class="ml-2 text-sm text-gray-700">Is Married</span>
+                        </label>
+                        @error('is_married') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
                 </div>
 
                 <!-- Church Information Section -->
@@ -129,25 +178,35 @@
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Church Information</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Status -->
-                        <div>
-                            <label for="status" class="block text-sm font-medium text-gray-700">Status *</label>
-                            <select wire:model="status" id="status" required
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Select Status</option>
-                                @foreach($statuses as $statusOption)
-                                    <option value="{{ $statusOption->value }}">{{ $statusOption->value }}</option>
-                                @endforeach
-                            </select>
-                            @error('status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
                         <!-- Invited By -->
                         <div>
-                            <label for="invitedBy" class="block text-sm font-medium text-gray-700">Invited By</label>
-                            <input type="text" wire:model="invitedBy" id="invitedBy"
+                            <label for="invited_by" class="block text-sm font-medium text-gray-700">Invited By</label>
+                            <input type="text" wire:model="invited_by" id="invited_by"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            @error('invitedBy') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            @error('invited_by') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Date Invited -->
+                        <div>
+                            <label for="date_invited" class="block text-sm font-medium text-gray-700">Date Invited</label>
+                            <input type="date" wire:model="date_invited" id="date_invited"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            @error('date_invited') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Service Invited -->
+                        <div>
+                            <label for="service_invited" class="block text-sm font-medium text-gray-700">Service Invited</label>
+                            <select wire:model="service_invited" id="service_invited"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Select Service</option>
+                                @if(!empty($serviceEvents))
+                                    @foreach($serviceEvents as $event)
+                                        <option value="{{ $event->value }}">{{ $event->value }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            @error('service_invited') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Member Role -->
@@ -156,9 +215,11 @@
                             <select wire:model="member_role" id="member_role" required
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Select Role</option>
-                                @foreach($memberRoles as $role)
-                                    <option value="{{ $role->value }}">{{ $role->value }}</option>
-                                @endforeach
+                                @if(!empty($memberRoles))
+                                    @foreach($memberRoles as $role)
+                                        <option value="{{ $role->value }}">{{ $role->value }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             @error('member_role') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
@@ -169,9 +230,11 @@
                             <select wire:model="hills_journey" id="hills_journey" required
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Select Hills Journey</option>
-                                @foreach($hills_journeys as $journey)
-                                    <option value="{{ $journey->value }}">{{ $journey->value }}</option>
-                                @endforeach
+                                @if(!empty($hillsJourneys))
+                                    @foreach($hillsJourneys as $journey)
+                                        <option value="{{ $journey->value }}">{{ $journey->value }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             @error('hills_journey') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
@@ -189,9 +252,11 @@
                             <select wire:model="ministry" id="ministry"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Select Ministry</option>
-                                @foreach($ministries as $ministryOption)
-                                    <option value="{{ $ministryOption->value }}">{{ $ministryOption->value }}</option>
-                                @endforeach
+                                @if(!empty($ministries))
+                                    @foreach($ministries as $ministryOption)
+                                        <option value="{{ $ministryOption->value }}">{{ $ministryOption->value }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             @error('ministry') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
@@ -202,9 +267,11 @@
                             <select wire:model="ministry_role" id="ministry_role"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Select Role</option>
-                                @foreach($ministry_roles as $role)
-                                    <option value="{{ $role->value }}">{{ $role->value }}</option>
-                                @endforeach
+                                @if(!empty($ministryRoles))
+                                    @foreach($ministryRoles as $role)
+                                        <option value="{{ $role->value }}">{{ $role->value }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             @error('ministry_role') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
@@ -228,9 +295,11 @@
                         <select wire:model="life_group" id="life_group"
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Select Life Group</option>
-                            @foreach($lifeGroups as $lifeGroup)
-                                <option value="{{ $lifeGroup->id }}">{{ $lifeGroup->life_group_name }}</option>
-                            @endforeach
+                            @if(!empty($lifeGroups))
+                                @foreach($lifeGroups as $lifeGroup)
+                                    <option value="{{ $lifeGroup->id }}">{{ $lifeGroup->life_group_name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                         @error('life_group') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         
